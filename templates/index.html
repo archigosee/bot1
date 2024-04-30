@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple E-commerce Demo</title>
+</head>
+<body>
+    <h1>Simple E-commerce Demo</h1>
+
+    <h2>User ID: {{ user_id }}</h2>
+
+    <h2>Items</h2>
+    <ul>
+        <li>Item 1 - $10 <button onclick="addItem('Item 1', 10)">Add to Cart</button></li>
+        <li>Item 2 - $20 <button onclick="addItem('Item 2', 20)">Add to Cart</button></li>
+        <li>Item 3 - $30 <button onclick="addItem('Item 3', 30)">Add to Cart</button></li>
+    </ul>
+
+    <h2>Cart</h2>
+    <ul id="cart"></ul>
+
+    <button onclick="window.location.href='/checkout'" style="color: white; background-color: black; padding: 5px 10px; border: none; cursor: pointer;">Checkout</button>
+
+    <!-- Add this link to navigate to the checkout page -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        // Function to set user ID in local storage
+        function setUserId(userId) {
+            localStorage.setItem('user_id', userId);
+            document.getElementById('user_id').textContent = userId;
+        }
+
+        // Check if user ID is already set in local storage
+        var userId = localStorage.getItem('user_id');
+        if (userId) {
+            document.getElementById('user_id').textContent = userId;
+        }
+
+        // Listen for messages from Telegram bot
+        window.addEventListener('message', function(event) {
+            if (event.origin === 'https://telegram.org') {
+                var data = event.data;
+                if (data && data.message && data.message.from && data.message.from.id) {
+                    setUserId(data.message.from.id);
+                }
+            }
+        });
+    </script>
+</body>
+</html>
